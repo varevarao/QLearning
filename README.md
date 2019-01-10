@@ -5,7 +5,7 @@ Run `npm i` to install required dependencies.
 
 Then run `npm run go` to check out the learning process live.
 
-To see the output on each training, set lower the `MAX_TRAINING_RUNS` parameter, and set `PRINT_DEBUG = true` under QLearning.js
+To see the output on each training, lower the `MAX_TRAINING_RUNS` parameter, and set `PRINT_DEBUG = true` under QLearning.js
 
 ## Resources:
 1. QLearning introduction with a basic example: [freeCodeCamp](https://medium.freecodecamp.org/an-introduction-to-q-learning-reinforcement-learning-14ac0b4493cc)
