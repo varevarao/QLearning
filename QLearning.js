@@ -124,9 +124,9 @@ function startTraining() {
 		do {
 			action = ACTIONS_IDX[getNextAction()];
 			delta = getPosDelta(terrainPos, action);
-
-			console.log('Attempting action ' + action);
 		} while((terrainPos + delta) < 0 || (terrainPos + delta) >= terrain.length);
+
+		console.log('Attempting action ' + action);
 
 		let nextState = terrain[terrainPos + delta];
 		let reward = getReward(nextState, action);
@@ -179,7 +179,7 @@ do {
 	}
 
 	trainingRun++;
-} while(result < 0 || trainingRun < MAX_TRAINING_RUNS);
+} while(trainingRun < MAX_TRAINING_RUNS);
 
 console.log('\n\nTraining Complete.');
 dumpData();
