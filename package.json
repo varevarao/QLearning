@@ -1,0 +1,22 @@
+{
+  "name": "qlearning",
+  "version": "1.0.0",
+  "description": "A basic QLearning test and resource to build on",
+  "main": "QLearning.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varevarao/QLearning.git"
+  },
+  "keywords": [
+    "qlearning"
+  ],
+  "author": "varao,yagarwal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/varevarao/QLearning/issues"
+  },
+  "homepage": "https://github.com/varevarao/QLearning#readme"
+}
