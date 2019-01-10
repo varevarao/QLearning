@@ -109,7 +109,7 @@ function startTraining() {
 	let terrainPos = 0;
 	let iterations = 0;
 
-	while(terrainPos < terrain.length) {
+	while(true) {
 		// Print current state
 		showPosition(terrainPos);
 
