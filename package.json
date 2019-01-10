@@ -4,7 +4,8 @@
   "description": "A basic QLearning test and resource to build on",
   "main": "QLearning.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "go": "node QLearning.js"
   },
   "repository": {
     "type": "git",
