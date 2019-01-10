@@ -1,7 +1,8 @@
 const gamma = 0.9;
 const alpha = 0.7;
 const epsilon = 0.2;
-const MAX_TRAINING_RUNS = 100;
+const MAX_TRAINING_RUNS = 100000;
+const PRINT_DEBUG = false;
 
 const terrain = "S_T__R_TR__TT_#";
 const QTable = [
@@ -87,7 +88,7 @@ function getReward(state, action) {
 }
 
 function dumpData() {
-	console.log('QTable');
+	console.log('\nQTable');
 	for(let row of QTable) {
 		let rowStr = '';
 		for(let col of row) {
@@ -96,7 +97,7 @@ function dumpData() {
 		console.log(rowStr);
 	}
 
-	console.log('Payouts: ', payoutAvg);
+	console.log('\nPayouts: ', payoutAvg);
 }
 
 function showPosition(terrainPos) {
@@ -111,7 +112,7 @@ function startTraining() {
 
 	while(true) {
 		// Print current state
-		showPosition(terrainPos);
+		if(PRINT_DEBUG) showPosition(terrainPos);
 
 		// Current state
 		let currentState = terrain[terrainPos];
@@ -126,7 +127,7 @@ function startTraining() {
 			delta = getPosDelta(terrainPos, action);
 		} while((terrainPos + delta) < 0 || (terrainPos + delta) >= terrain.length);
 
-		console.log('Attempting action ' + action);
+		if(PRINT_DEBUG) console.log('Attempting action ' + action);
 
 		let nextState = terrain[terrainPos + delta];
 		let reward = getReward(nextState, action);
@@ -146,17 +147,18 @@ function startTraining() {
 		terrainPos += delta;
 
 		// Print the QTable and payout table on every 10 iterations
-		//if(iterations++ % 10 === 0) {
-			console.log('Run: ' + trainingRun + ' Iteration: ' + ++iterations);
-			dumpData();
-		//}
+		if(PRINT_DEBUG && ++iterations % 10 === 0) {
+			console.log('Run: ' + trainingRun + ' Iteration: ' + iterations);
+		 	dumpData();
+		}
 
 		if(nextState === 'R') {
 			// Dead
-			console.log('Dead!');
+			if(PRINT_DEBUG) console.log('DEAD!');
 			return -1;
 		} else if(nextState === '#') {
-			console.log('FINISH LINE!');
+			// Finished
+			if(PRINT_DEBUG) console.log('FINISH!');
 			return 1;
 		}
 	}
@@ -181,6 +183,6 @@ do {
 	trainingRun++;
 } while(trainingRun < MAX_TRAINING_RUNS);
 
-console.log('\n\nTraining Complete.');
+console.log('\nTraining Complete.');
 dumpData();
-console.log('Deaths: ' + deaths + ' Finishes: ' + finishes);
+console.log('\nDeath: ' + (100*deaths / MAX_TRAINING_RUNS) + '% Finishes: ' + (100*finishes / MAX_TRAINING_RUNS) + '%');
