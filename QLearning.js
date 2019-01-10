@@ -1,3 +1,8 @@
+const gamma = 0.9;
+const alpha = 0.7;
+const epsilon = 0.2;
+const MAX_TRAINING_RUNS = 100;
+
 const terrain = "S_T__R_TR__TT_#";
 const QTable = [
 	[0, 0, 0],
@@ -22,10 +27,6 @@ const ACTIONS = {
 	'R': 1,
 	'J': 2
 };
-
-const gamma = 0.9;
-const alpha = 0.7;
-const epsilon = 0.2;
 
 const payoutAvg = [0, 0, 0];
 
@@ -117,14 +118,16 @@ function startTraining() {
 		
 		// Next action
 		let action = '';
+		let delta = 0;
 
 		// Choose a legal action
 		do {
 			action = ACTIONS_IDX[getNextAction()];
-			console.log('Attempting action ' + action);
-		} while(terrainPos === 0 && action === 'L');
+			delta = getPosDelta(terrainPos, action);
 
-		let delta = getPosDelta(terrainPos, action);
+			console.log('Attempting action ' + action);
+		} while((terrainPos + delta) < 0 || (terrainPos + delta) >= terrain.length);
+
 		let nextState = terrain[terrainPos + delta];
 		let reward = getReward(nextState, action);
 
@@ -144,16 +147,40 @@ function startTraining() {
 
 		// Print the QTable and payout table on every 10 iterations
 		//if(iterations++ % 10 === 0) {
-			console.log('Iterations: ' + ++iterations);
+			console.log('Run: ' + trainingRun + ' Iteration: ' + ++iterations);
 			dumpData();
 		//}
 
 		if(nextState === 'R') {
 			// Dead
 			console.log('Dead!');
-			break;
+			return -1;
+		} else if(nextState === '#') {
+			console.log('FINISH LINE!');
+			return 1;
 		}
 	}
+
+	return 0;
 }
 
-startTraining();
+let trainingRun = 0;
+let result = -1;
+let deaths = 0;
+let finishes = 0;
+
+do {
+	result = startTraining();
+
+	if(result < 0) {
+		deaths++;
+	} else if(result > 0) {
+		finishes++;
+	}
+
+	trainingRun++;
+} while(result < 0 || trainingRun < MAX_TRAINING_RUNS);
+
+console.log('\n\nTraining Complete.');
+dumpData();
+console.log('Deaths: ' + deaths + ' Finishes: ' + finishes);
